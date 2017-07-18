@@ -66,6 +66,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     @IBAction func save(_ sender: UIButton) {
+    
+        UIImageWriteToSavedPhotosAlbum(imageView.image!, self, #selector(image(_: didFinishSavingWithError:contextInfo:)), nil)
     }
     
     @IBAction func intensityChanged(_ sender: UISlider) {
@@ -113,6 +115,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             //creates a new UIImage from the CGImage
             imageView.image = processedImage
             //assigns the UIImage to the imageView
+        }
+    }
+    
+    func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        
+        if let error = error {
+            
+            //we got back an error!
+            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            
+            present(ac, animated: true)
+        } else {
+            
+            let ac = UIAlertController(title: "Saved!", message: "Your edited image has been saved to your photos.", preferredStyle: .alert)
+            
+            present(ac, animated: true)
         }
     }
     
